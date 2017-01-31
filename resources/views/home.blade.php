@@ -174,7 +174,7 @@
             <h3>Contact Us</h3><br>
             <p>
 				Perry Norgarb,<br/>
-                Noordhoeh,<br/>
+                Noordhoek,<br/>
                 Cape Town
             </p>
 			<div class="contact-link"><i class="fa fa-envelope-o"></i> <a href="mailto:perry@smallbizcrm.com">perry@smallbizcrm.com</a></div>
@@ -183,24 +183,37 @@
         </div>
 
         <div class="col-lg-7">
-            <h3>Drop Us A Line</h3>
-            <br>
-            <form role="form" action="#" method="post" enctype="plain">
-                <div class="form-group">
-                    <label for="name1">Your Name</label>
-                    <input type="name" name="Name" class="form-control" id="name1" placeholder="Your Name">
-                </div>
-                <div class="form-group">
-                    <label for="email1">Email address</label>
-                    <input type="email" name="Mail" class="form-control" id="email1" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                    <label>Your Text</label>
-                    <textarea class="form-control" name="Message" rows="3"></textarea>
-                </div>
-                <br>
-                <button type="submit" class="btn btn-large btn-success">SUBMIT</button>
-            </form>
+            <h3>Keep notified of updates to this exciting project!</h3>
+            <p>(We won't spam you, promise!)</p>
+          <form accept-charset="UTF-8" action="https://smallbizcrm.infusionsoft.com/app/form/process/7c6d3455468728711ce24d5ddaa4bf02" class="infusion-form" method="POST">
+    <input name="inf_form_xid" type="hidden" value="7c6d3455468728711ce24d5ddaa4bf02" />
+    <input name="inf_form_name" type="hidden" value="Newsletter Opt-In" />
+    <input name="infusionsoft_version" type="hidden" value="1.62.0.37" />
+    <div class="form-group row">
+        <label class="col-2 col-form-label" for="inf_field_FirstName">First Name *</label>
+        <div class="col-10">   <input class="form-control" id="inf_field_FirstName" name="inf_field_FirstName" type="text" /></div>
+    </div>
+    <div class="form-group row">
+        <label class="col-2 col-form-label" for="inf_field_Email">Email *</label>
+       <div class="col-10"> <input class="form-control" id="inf_field_Email" name="inf_field_Email" type="text" /></div>
+    </div>
+    <div class="row">
+        <div>
+            <img alt="captcha" border="0px" name="captcha" onclick="reloadJcaptcha();" src="https://smallbizcrm.infusionsoft.com/Jcaptcha/img.jsp" title="If you can't read the image, click it to get another one." />
+            <script type="text/javascript">function reloadJcaptcha() {var now = new Date();if (document.images) {document.images.captcha.src = 'https://smallbizcrm.infusionsoft.com/Jcaptcha/img.jsp?reload=' + now}}</script>
+        </div>
+        <div>
+            <label for="captcha.typed">Enter the above code:</label>
+        </div>
+        <div>
+            <input class="infusion-field-input-container" id="captcha.typed" name="captcha.typed" type="text" />
+        </div>
+    </div>
+    <div style="padding-top: 10px;" class="form-group row">
+        <input type="submit" class="btn btn-primary" value="Submit" />
+    </div>
+</form>
+<script type="text/javascript" src="https://smallbizcrm.infusionsoft.com/app/webTracking/getTrackingCode"></script>
         </div>
     </div>
 </div>
