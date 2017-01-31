@@ -34,6 +34,15 @@
     <script src="{{ asset('/la-assets/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
     <script src="{{ asset('/la-assets/js/smoothscroll.js') }}"></script>
 
+ <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdodiLO598_RD8_NYXK7nBKNA9Fhx_uBQ&libraries=places,geometry&.js"></script>
+
+    <script
+
+              src="https://code.jquery.com/jquery-3.1.1.js"
+
+              integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+
+              crossorigin="anonymous"></script>
 
 </head>
 
@@ -74,17 +83,19 @@
     <div class="container">
         <div class="row centered">
             <div class="col-lg-12">
-                <h1>{{ LAConfigs::getByKey('sitename_part1') }} <b><a>{{ LAConfigs::getByKey('sitename_part2') }}</a></b></h1>
-                <h3>{{ LAConfigs::getByKey('site_description') }}</h3>
+                <h1> <b><a>foodtrees.org</a></b></h1>
+                <h3>Find an abundance of fruit trees near you</h3>
                 <h3><a href="{{ url('/login') }}" class="btn btn-lg btn-success">Get Started!</a></h3><br>
             </div>
             <div class="col-lg-2">
-                <h5>Amazing Functionalities</h5>
-                <p>for Modern Admin Panels</p>
+                <h5>Find your location</h5>
+                <p>And Nurseries Near you</p>
                 <img class="hidden-xs hidden-sm hidden-md" src="{{ asset('/la-assets/img/arrow1.png') }}">
             </div>
             <div class="col-lg-8">
-                <img class="img-responsive" src="{{ asset('/la-assets/img/app-bg.png') }}" alt="">
+                <input id="findMe" type="button" value="find closest place">
+
+<div id="map-canvas" style="height:500px;"></div>
             </div>
             <div class="col-lg-2">
                 <br>
@@ -135,7 +146,7 @@
             </div>
 
             <div class="col-lg-7">
-				<h3 class="feature-title">What is LaraAdmin ?</h3><br>
+				<h3 class="feature-title">What is foodtrees.org ?</h3><br>
 				<ol class="features">
 					<li><strong>CMS</strong> (Content Management System) &#8211; Manages Modules &amp; their Data</li>
 					<li>Backend <strong>Admin Panel</strong> &#8211; Data can be used in front end applications with ease.</li>
@@ -162,15 +173,13 @@
         <div class="col-lg-5">
             <h3>Contact Us</h3><br>
             <p>
-				Dwij IT Solutions,<br/>
-				Web Development Company in Pune,<br/>
-                B4, Patang Plaza Phase 5,<br/>
-                Opp. PICT College,<br/>
-                Katraj, Pune, India - 411046
+				Perry Norgarb,<br/>
+                Noordhoeh,<br/>
+                Cape Town
             </p>
-			<div class="contact-link"><i class="fa fa-envelope-o"></i> <a href="mailto:hello@laraadmin.com">hello@laraadmin.com</a></div>
-			<div class="contact-link"><i class="fa fa-cube"></i> <a href="http://laraadmin.com">laraadmin.com</a></div>
-			<div class="contact-link"><i class="fa fa-building"></i> <a href="http://dwijitsolutions.com">dwijitsolutions.com</a></div>
+			<div class="contact-link"><i class="fa fa-envelope-o"></i> <a href="mailto:perry@smallbizcrm.com">perry@smallbizcrm.com</a></div>
+			<div class="contact-link"><i class="fa fa-cube"></i> <a href="http://foodtrees.org">foodtrees.org</a></div>
+			<div class="contact-link"><i class="fa fa-building"></i> <a href="http://smallbizcrm.com">smallbizcrm.com</a></div>
         </div>
 
         <div class="col-lg-7">
@@ -214,4 +223,339 @@
     })
 </script>
 </body>
+<script type="text/javascript">
+
+
+
+
+
+  jQuery(function($){
+
+
+
+ var $overlay = $('.overlay'),
+
+     resize = true,
+
+     map;
+
+   var service;
+
+   var marker = [];
+
+   var pos;
+
+   var infowindow;
+
+   var placeLoc
+
+
+
+
+
+function initialize() {
+
+ /*var mapOptions = {
+
+   zoom: 8,
+
+   center: new google.maps.LatLng(-34.397, 150.644),
+
+   mapTypeId: google.maps.MapTypeId.ROADMAP
+
+ };
+
+ map = new google.maps.Map(document.getElementById('map-canvas'),
+
+     mapOptions);
+
+
+
+}*/
+
+var mapOptions = {
+
+   zoom: 13
+
+ };
+
+ map = new google.maps.Map(document.getElementById('map-canvas'),
+
+     mapOptions);
+
+
+
+ // Try HTML5 geolocation
+
+ if(navigator.geolocation) {
+
+   navigator.geolocation.getCurrentPosition(function(position) {
+
+
+
+           var pos = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+
+           $('#findMe').data('pos',pos);
+
+       var request = {
+
+     location:pos,
+
+     radius:10000,
+
+     keyword: 'plants nursery',
+
+ };
+
+
+
+ infowindow = new google.maps.InfoWindow();
+
+ var service = new google.maps.places.PlacesService(map);
+
+ service.nearbySearch(request,callback);
+
+
+
+
+
+       infowindow = new google.maps.InfoWindow({
+
+       map: map,
+
+       position: pos,
+
+       content: 'You Are Here'
+
+     });
+
+
+
+
+
+     map.setCenter(pos);
+
+   }, function() {
+
+     handleNoGeolocation(true);
+
+   });
+
+ } else {
+
+   // Browser doesn't support Geolocation
+
+   handleNoGeolocation(false);
+
+ }
+
+
+
+
+
+
+
+ function callback(results, status) {
+
+     var markers = [];
+
+ if (status == google.maps.places.PlacesServiceStatus.OK) {
+
+   for (var i = 0; i < results.length; i++) {
+
+     markers.push(createMarker(results[i]));
+
+   }
+
+ }
+
+ $('#findMe').data('markers',markers);
+
+}
+
+}
+
+
+
+function createMarker(place) {
+
+ placeLoc = place.geometry.location;
+
+ var marker = new google.maps.Marker({
+
+   map: map,
+
+   position: place.geometry.location,
+
+   icon: {
+
+       path: google.maps.SymbolPath.CIRCLE,
+
+       scale: 8,
+
+       fillColor:'00a14b',
+
+       fillOpacity:0.3,
+
+       fillStroke: '00a14b',
+
+       strokeWeight:4,
+
+       strokeOpacity: 0.7
+
+   },
+
+
+
+
+
+
+
+ });
+
+
+
+
+
+ google.maps.event.addListener(marker, 'click', function() {
+
+   infowindow.setContent(place.name + '<br>' + place.place_address);
+
+   infowindow.open(map, marker, this);
+
+ });
+
+ return marker;
+
+}
+
+
+
+function handleNoGeolocation(errorFlag) {
+
+ if (errorFlag) {
+
+   var content = 'Error: The Geolocation service failed.';
+
+ } else {
+
+   var content = 'Error: Your browser doesn\'t support geolocation.';
+
+ }
+
+
+
+ var options = {
+
+   map: map,
+
+   position: new google.maps.LatLng(60, 105),
+
+   content: content
+
+ };
+
+
+
+ var infowindow = new google.maps.InfoWindow(options);
+
+ map.setCenter(options.position);
+
+}
+
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+$('#show').click(function(){
+
+
+
+   $overlay.show();
+
+
+
+ if ( resize ){
+
+   google.maps.event.trigger(map, 'resize');
+
+   resize = false;
+
+ }
+
+
+
+});
+
+
+
+$('.overlay-bg').click(function(){
+
+
+
+   $overlay.hide();
+
+
+
+});
+
+
+
+$( "#findMe" ).click(function() {
+
+
+
+ var pos     = $(this).data('pos'),
+
+     markers = $(this).data('markers'),
+
+     closest;
+
+
+
+ if(!pos || !markers){
+
+   alert('pos or markers not set yet');return;
+
+ }
+
+
+
+ $.each(markers,function(){
+
+   var distance=google.maps.geometry.spherical
+
+                 .computeDistanceBetween(this.getPosition(),pos);
+
+   if(!closest || closest.distance > distance){
+
+     closest={marker:this,
+
+              distance:distance}
+
+   }
+
+ });
+
+ if(closest){
+
+   //closest.marker will be the nearest marker, do something with it
+
+   //here we simply trigger a click, which will open the InfoWindow
+
+   google.maps.event.trigger(closest.marker,'click')
+
+ }
+
+});
+
+
+
+
+
+});
+
+  </script>
 </html>
